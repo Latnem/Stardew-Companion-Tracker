@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Stardew Save Sync Tracker</title>
+<style>
+  :root{
+    --bg:#eef2f5;--card:#fff;--ink:#1f2937;--muted:#667085;--line:#d7dde5;
+    --green:#238823;--blue:#2563eb;--gold:#b7791f;--red:#c2410c;--purple:#6d28d9;
+    --soft:#f8fafc;--done:#ecfdf3;--warn:#fff7ed;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+  header{background:#fff;border-bottom:1px solid var(--line);padding:18px 18px 14px;position:sticky;top:0;z-index:10}
+  h1{margin:0;font-size:24px;letter-spacing:-.02em}
+  .sub{margin-top:4px;color:var(--muted);font-size:14px}
+  .wrap{max-width:1180px;margin:0 auto;padding:18px}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0 0}
+  button,.fileLabel{border:1px solid var(--line);background:#fff;color:var(--ink);padding:9px 12px;font-weight:700;cursor:pointer;border-radius:0;font-size:14px}
+  button.primary,.fileLabel.primary{background:var(--green);color:white;border-color:var(--green)}
+  button.blue{background:var(--blue);color:white;border-color:var(--blue)}
+  button.danger{background:#fff;color:#b42318;border-color:#f2b8b5}
+  input[type=file]{display:none}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+  .stat{background:var(--card);border:1px solid var(--line);padding:14px}
+  .stat .label{font-size:12px;color:var(--muted);text-transform:uppercase;font-weight:700}
+  .stat .value{font-size:24px;font-weight:800;margin-top:4px}
+  .card{background:var(--card);border:1px solid var(--line);margin-top:14px;padding:14px}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .tab{background:#fff;border:1px solid var(--line);padding:9px 12px;font-weight:700;cursor:pointer}
+  .tab.active{background:#1f2937;color:#fff;border-color:#1f2937}
+  .search{width:100%;padding:10px;border:1px solid var(--line);font-size:15px;border-radius:0;margin-top:12px;background:#fff}
+  .section{display:none}.section.active{display:block}
+  .summaryRow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid var(--line);background:var(--soft);padding:10px;margin:8px 0}
+  .summaryRow.done{background:var(--done)}
+  .bar{height:10px;background:#e5e7eb;border:1px solid var(--line);overflow:hidden;margin-top:6px}
+  .bar span{display:block;height:100%;background:var(--green);width:0%}
+  details{border:1px solid var(--line);background:#fff;margin:8px 0}
+  summary{padding:10px;font-weight:800;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center}
+  .items{padding:0 10px 10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .item{border:1px solid var(--line);padding:8px;background:#fff;display:flex;gap:8px;align-items:flex-start}
+  .item.done{background:var(--done);color:#475467}
+  .item.missing{background:#fff}
+  .item input{margin-top:2px}
+  .itemName{font-weight:700}.meta{font-size:12px;color:var(--muted);margin-top:2px}
+  .pill{font-size:12px;font-weight:800;padding:3px 6px;border:1px solid var(--line);background:#fff;white-space:nowrap}
+  .pill.green{background:var(--done);color:var(--green);border-color:#b7e4c7}.pill.red{background:#fff1f0;color:#b42318;border-color:#f4c7c3}.pill.blue{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+  .note{font-size:13px;color:var(--muted);line-height:1.45}.warn{background:var(--warn);border:1px solid #fed7aa;padding:10px;margin-top:10px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .miniTitle{font-size:16px;font-weight:800;margin:0 0 8px}.muted{color:var(--muted)}
+  .completedBox{margin-top:12px;border-top:2px solid var(--line);padding-top:10px}
+  code{background:#f1f5f9;padding:2px 4px;border:1px solid #e2e8f0}
+  @media(max-width:800px){.grid,.two,.three{grid-template-columns:1fr}.items{grid-template-columns:1fr}header{position:static}.wrap{padding:12px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="padding:0">
+    <h1>Stardew Save Sync Tracker</h1>
+    <div class="sub">Local-only tracker for Stardew Valley saves. GitHub friendly. No upload. No server.</div>
+    <div class="toolbar">
+      <label class="fileLabel primary" for="saveFile">Import Save File</label>
+      <input id="saveFile" type="file" />
+      <button class="blue" id="pickFolderBtn">Select Save Folder</button>
+      <button id="refreshBtn">Refresh Selected Save</button>
+      <button id="exportBtn">Export Tracker Data</button>
+      <button class="danger" id="resetBtn">Reset Manual Checks</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="card">
+    <div class="miniTitle">How syncing works</div>
+    <div class="note">
+      Click <b>Select Save Folder</b> and choose your folder like <code>%AppData%\StardewValley\Saves\FarmName_123456789</code>.
+      Chrome/Edge can remember permission, so when you reopen this tracker from GitHub, click <b>Refresh Selected Save</b> and it reads your local save again.
+      If another person uses this website, they select their own save. Their progress stays local to their browser.
+    </div>
+    <div id="status" class="warn">No save imported yet.</div>
+  </div>
+
+  <section class="grid" id="stats"></section>
+
+  <div class="tabs" id="tabs"></div>
+  <input id="search" class="search" placeholder="Search items, bundles, quests, achievements..." />
+
+  <section id="dashboard" class="section active"></section>
+  <section id="bundles" class="section"></section>
+  <section id="achievements" class="section"></section>
+  <section id="quests" class="section"></section>
+  <section id="collections" class="section"></section>
+  <section id="villagers" class="section"></section>
+  <section id="notes" class="section"></section>
+</main>
+
+<script>
+const DATA_VERSION = '1.0.0';
+const state = {
+  saveText:null, xml:null, farm:{}, manual:{}, parsed:{}, dirHandle:null, fileHandle:null
+};
+const LS_KEY='stardew_save_sync_tracker_manual_v1';
+const DB_NAME='stardew-save-sync-tracker';
+
+const bundleData = [
+ {room:'Crafts Room', bundle:'Spring Foraging', items:['Wild Horseradish','Daffodil','Leek','Dandelion']},
+ {room:'Crafts Room', bundle:'Summer Foraging', items:['Grape','Spice Berry','Sweet Pea']},
+ {room:'Crafts Room', bundle:'Fall Foraging', items:['Common Mushroom','Wild Plum','Hazelnut','Blackberry']},
+ {room:'Crafts Room', bundle:'Winter Foraging', items:['Winter Root','Crystal Fruit','Snow Yam','Crocus']},
+ {room:'Crafts Room', bundle:'Construction', items:['Wood x99','Wood x99','Stone x99','Hardwood x10']},
+ {room:'Crafts Room', bundle:'Exotic Foraging', items:['Coconut','Cactus Fruit','Cave Carrot','Red Mushroom','Purple Mushroom','Maple Syrup','Oak Resin','Pine Tar','Morel']},
+ {room:'Pantry', bundle:'Spring Crops', items:['Parsnip','Green Bean','Cauliflower','Potato']},
+ {room:'Pantry', bundle:'Summer Crops', items:['Tomato','Hot Pepper','Blueberry','Melon']},
+ {room:'Pantry', bundle:'Fall Crops', items:['Corn','Eggplant','Pumpkin','Yam']},
+ {room:'Pantry', bundle:'Quality Crops', items:['Gold Parsnip x5','Gold Melon x5','Gold Pumpkin x5','Gold Corn x5']},
+ {room:'Pantry', bundle:'Animal', items:['Large Milk','Large Brown Egg','Large White Egg','Large Goat Milk','Wool','Duck Egg']},
+ {room:'Pantry', bundle:'Artisan', items:['Truffle Oil','Cloth','Goat Cheese','Cheese','Honey','Jelly','Apple','Apricot','Orange','Peach','Pomegranate','Cherry']},
+ {room:'Fish Tank', bundle:'River Fish', items:['Sunfish','Catfish','Shad','Tiger Trout']},
+ {room:'Fish Tank', bundle:'Lake Fish', items:['Largemouth Bass','Carp','Bullhead','Sturgeon']},
+ {room:'Fish Tank', bundle:'Ocean Fish', items:['Sardine','Tuna','Red Snapper','Tilapia']},
+ {room:'Fish Tank', bundle:'Night Fishing', items:['Walleye','Bream','Eel']},
+ {room:'Fish Tank', bundle:'Crab Pot', items:['Lobster','Crayfish','Crab','Cockle','Mussel','Shrimp','Snail','Periwinkle','Oyster','Clam']},
+ {room:'Fish Tank', bundle:'Specialty Fish', items:['Pufferfish','Ghostfish','Sandfish','Woodskip']},
+ {room:'Boiler Room', bundle:'Blacksmith', items:['Copper Bar','Iron Bar','Gold Bar']},
+ {room:'Boiler Room', bundle:'Geologist', items:['Quartz','Earth Crystal','Frozen Tear','Fire Quartz']},
+ {room:'Boiler Room', bundle:'Adventurer', items:['Slime x99','Bat Wing x10','Solar Essence','Void Essence']},
+ {room:'Bulletin Board', bundle:'Chef', items:['Maple Syrup','Fiddlehead Fern','Truffle','Poppy','Maki Roll','Fried Egg']},
+ {room:'Bulletin Board', bundle:'Dye', items:['Red Mushroom','Sea Urchin','Sunflower','Duck Feather','Aquamarine','Red Cabbage']},
+ {room:'Bulletin Board', bundle:'Field Research', items:['Purple Mushroom','Nautilus Shell','Chub','Frozen Geode']},
+ {room:'Bulletin Board', bundle:'Fodder', items:['Wheat x10','Hay x10','Apple x3']},
+ {room:'Bulletin Board', bundle:'Enchanter', items:['Oak Resin','Wine','Rabbit\'s Foot','Pomegranate']},
+ {room:'Vault', bundle:'Vault Payments', items:['2,500g Bundle','5,000g Bundle','10,000g Bundle','25,000g Bundle']}
+];
+
+const achievementData = [
+ ['Greenhorn','Earn 15,000g'],['Cowpoke','Earn 50,000g'],['Homesteader','Earn 250,000g'],['Millionaire','Earn 1,000,000g'],['Legend','Earn 10,000,000g'],
+ ['A Complete Collection','Complete the Museum collection'],['A New Friend','Reach 5 hearts with someone'],['Best Friends','Reach 10 hearts with someone'],['The Beloved Farmer','Reach 10 hearts with 8 people'],
+ ['Cliques','Reach 5 hearts with 4 people'],['Networking','Reach 5 hearts with 10 people'],['Popular','Reach 5 hearts with 20 people'],
+ ['Cook','Cook 10 different recipes'],['Sous Chef','Cook 25 different recipes'],['Gourmet Chef','Cook every recipe'],
+ ['Moving Up','Upgrade your house'],['Living Large','Upgrade your house to maximum size'],
+ ['D.I.Y.','Craft 15 different items'],['Artisan','Craft 30 different items'],['Craft Master','Craft every item'],
+ ['Fisherman','Catch 10 different fish'],['Ol\' Mariner','Catch 24 different fish'],['Master Angler','Catch every fish'],['Mother Catch','Catch 100 fish'],
+ ['Treasure Trove','Donate 40 items to the Museum'],['Gofer','Complete 10 help wanted requests'],['A Big Help','Complete 40 help wanted requests'],
+ ['Polyculture','Ship 15 of each crop'],['Monoculture','Ship 300 of one crop'],['Full Shipment','Ship every item'],
+ ['Prairie King','Beat Journey of the Prairie King'],['The Bottom','Reach the lowest level of the mines'],['Local Legend','Restore the Community Center'],['Joja Co. Member Of The Year','Complete Joja development form'],
+ ['Mystery Of The Stardrops','Find every Stardrop'],['Full House','Get married and have two kids'],['Singular Talent','Reach level 10 in one skill'],['Master Of The Five Ways','Reach level 10 in every skill'],
+ ['Protector Of The Valley','Complete all Monster Eradication goals'],['Ginger Island','Reach Ginger Island'],['Perfection','Reach the summit']
+];
+
+const questData = [
+ ['Introductions','Meet all villagers'],['Getting Started','Harvest a Parsnip'],['Raising Animals','Build a Coop'],['Advancement','Reach Farming level 1 and craft a Scarecrow'],['Explore The Mine','Reach level 5 in the Mines'],
+ ['Deeper In The Mine','Reach level 40 in the Mines'],['To The Bottom?','Reach level 120 in the Mines'],['Initiation','Kill 10 Slimes'],['Forging Ahead','Craft a Furnace'],['Smelting','Smelt a Copper Bar'],
+ ['Archaeology','Donate an artifact or mineral'],['Rat Problem','Investigate the Community Center'],['Meet The Wizard','Visit the Wizard'],['The Mysterious Qi','Follow Mr. Qi clue chain'],
+ ['A Winter Mystery','Find the shadowy figure and get Magnifying Glass'],['Robin\'s Lost Axe','Find Robin\'s axe'],['Jodi\'s Request','Bring Jodi a Cauliflower'],['Pam Is Thirsty','Bring Pam a Pale Ale'],
+ ['The Skull Key','Use Skull Key in Skull Cavern'],['Qi\'s Challenge','Reach Skull Cavern level 25'],['Cryptic Note','Reach Skull Cavern level 100'],['Goblin Problem','Access Witch\'s Hut'],['Dark Talisman','Retrieve the Dark Talisman']
+];
+
+const minerals = ['Quartz','Earth Crystal','Frozen Tear','Fire Quartz','Emerald','Aquamarine','Ruby','Amethyst','Topaz','Jade','Diamond','Prismatic Shard','Alamite','Bixite','Baryte','Aerinite','Calcite','Dolomite','Esperite','Fluorapatite','Geminite','Helvite','Jamborite','Jagoite','Kyanite','Lunarite','Malachite','Neptunite','Lemon Stone','Nekoite','Orpiment','Petrified Slime','Thunder Egg','Pyrite','Ocean Stone','Ghost Crystal','Tigerseye','Jasper','Opal','Fire Opal','Celestine','Marble','Sandstone','Granite','Basalt','Limestone','Soapstone','Hematite','Mudstone','Obsidian','Slate','Fairy Stone','Star Shards'];
+const artifacts = ['Dwarf Scroll I','Dwarf Scroll II','Dwarf Scroll III','Dwarf Scroll IV','Chipped Amphora','Arrowhead','Ancient Doll','Elvish Jewelry','Chewing Stick','Ornamental Fan','Dinosaur Egg','Rare Disc','Ancient Sword','Rusty Spoon','Rusty Spur','Rusty Cog','Chicken Statue','Ancient Seed','Prehistoric Tool','Dried Starfish','Anchor','Glass Shards','Bone Flute','Prehistoric Handaxe','Dwarvish Helm','Dwarf Gadget','Ancient Drum','Golden Mask','Golden Relic','Strange Doll','Strange Doll','Prehistoric Scapula','Prehistoric Tibia','Prehistoric Skull','Skeletal Hand','Prehistoric Rib','Prehistoric Vertebra','Skeletal Tail','Nautilus Fossil','Amphibian Fossil','Palm Fossil','Trilobite'];
+const fish = ['Pufferfish','Anchovy','Tuna','Sardine','Bream','Largemouth Bass','Smallmouth Bass','Rainbow Trout','Salmon','Walleye','Perch','Carp','Catfish','Pike','Sunfish','Red Mullet','Herring','Eel','Octopus','Red Snapper','Squid','Sea Cucumber','Super Cucumber','Ghostfish','Stonefish','Ice Pip','Lava Eel','Sandfish','Scorpion Carp','Flounder','Midnight Carp','Sturgeon','Tiger Trout','Bullhead','Tilapia','Chub','Dorado','Albacore','Shad','Lingcod','Halibut','Woodskip','Void Salmon','Slimejack','Stingray','Lionfish','Blue Discus','Midnight Squid','Spook Fish','Blobfish'];
+const villagers = ['Abigail','Alex','Caroline','Clint','Demetrius','Dwarf','Elliott','Emily','Evelyn','George','Gus','Haley','Harvey','Jas','Jodi','Kent','Krobus','Leah','Leo','Lewis','Linus','Marnie','Maru','Pam','Penny','Pierre','Robin','Sam','Sandy','Sebastian','Shane','Vincent','Willy','Wizard'];
+
+function loadManual(){try{state.manual=JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch{state.manual={}}}
+function saveManual(){localStorage.setItem(LS_KEY,JSON.stringify(state.manual))}
+function checkKey(group,name){return group+'::'+name}
+function manualDone(group,name){return !!state.manual[checkKey(group,name)]}
+function setManual(group,name,val){state.manual[checkKey(group,name)]=!!val;saveManual();render()}
+function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function q(sel){return document.querySelector(sel)}
+function qa(sel){return [...document.querySelectorAll(sel)]}
+function textOf(parent, tag){const el=parent?.getElementsByTagName(tag)?.[0];return el?el.textContent:''}
+function allText(tag){return [...state.xml.getElementsByTagName(tag)].map(x=>x.textContent)}
+function includesAnyText(name){return state.saveText && state.saveText.toLowerCase().includes(String(name).toLowerCase())}
+function parseSave(text){
+  state.saveText=text;
+  state.xml=new DOMParser().parseFromString(text,'text/xml');
+  const player=state.xml.getElementsByTagName('player')[0];
+  const stats=state.xml.getElementsByTagName('stats')[0];
+  state.farm={
+    name:textOf(player,'name')||'Unknown Farmer', farmName:textOf(player,'farmName')||'Unknown Farm',
+    money:textOf(player,'money')||'0', totalMoney:textOf(stats,'totalMoneyEarned')||'',
+    deepest:textOf(player,'deepestMineLevel')||'',
+    year:textOf(state.xml,'year')||'', season:textOf(state.xml,'currentSeason')||'', day:textOf(state.xml,'dayOfMonth')||'',
+    skills:{farming:textOf(player,'farmingLevel'), mining:textOf(player,'miningLevel'), combat:textOf(player,'combatLevel'), fishing:textOf(player,'fishingLevel'), foraging:textOf(player,'foragingLevel')}
+  };
+  state.parsed={
+    mail:new Set(allText('string')),
+    questsText: allText('quest').join('\n').toLowerCase(),
+    saveLower:text.toLowerCase(),
+    hasCommunityCenter: text.includes('ccMovieTheater') || text.toLowerCase().includes('communitycenter')
+  };
+}
+function autoDone(group,name){
+  if(!state.saveText) return false;
+  const n=String(name).replace(/ x\d+/,'').replace(/^Gold /,'').replace(/ Bundle$/,'').trim();
+  const lower=state.parsed.saveLower;
+  if(group==='Bundles'){
+    if(name.includes('2,500g')) return lower.includes('vault/0')||lower.includes('vault/1')||lower.includes('vault');
+    return lower.includes(n.toLowerCase());
+  }
+  if(group==='Minerals'||group==='Artifacts'||group==='Fish') return lower.includes(n.toLowerCase());
+  if(group==='Quests') return lower.includes(n.toLowerCase().split(' ')[0]) || state.parsed.questsText.includes(n.toLowerCase());
+  if(group==='Achievements') return inferAchievement(name);
+  return false;
+}
+function inferAchievement(name){
+  const f=state.farm, money=Number(f.totalMoney||f.money||0), deepest=Number(f.deepest||0);
+  if(name==='Greenhorn') return money>=15000;
+  if(name==='Cowpoke') return money>=50000;
+  if(name==='Homesteader') return money>=250000;
+  if(name==='Millionaire') return money>=1000000;
+  if(name==='Legend') return money>=10000000;
+  if(name==='The Bottom') return deepest>=120;
+  if(name==='Singular Talent') return Object.values(f.skills||{}).some(x=>Number(x)>=10);
+  if(name==='Master Of The Five Ways') return Object.values(f.skills||{}).length && Object.values(f.skills).every(x=>Number(x)>=10);
+  if(name==='Local Legend') return state.parsed.saveLower.includes('cccomplete')||state.parsed.saveLower.includes('communitycentercomplete');
+  return false;
+}
+function isDone(group,name){return manualDone(group,name) || autoDone(group,name)}
+function progressFor(group, items){const done=items.filter(x=>isDone(group,Array.isArray(x)?x[0]:x)).length;return {done,total:items.length,pct:items.length?Math.round(done/items.length*100):0}}
+function itemHTML(group,name,meta=''){
+  const done=isDone(group,name), auto=autoDone(group,name), man=manualDone(group,name);
+  return `<label class="item ${done?'done':'missing'}" data-search="${esc((name+' '+meta).toLowerCase())}">
+    <input type="checkbox" ${done?'checked':''} onchange="setManual('${esc(group)}','${esc(name).replace(/'/g,"\\'")}',this.checked)" />
+    <div><div class="itemName">${esc(name)}</div><div class="meta">${esc(meta)} ${auto?' · auto-detected':''}${man&&!auto?' · manual':''}</div></div>
+  </label>`;
+}
+function detailsHTML(title, group, items, meta=''){
+  const p=progressFor(group,items);
+  return `<details open data-search="${esc((title+' '+items.join(' ')).toLowerCase())}"><summary><span>${esc(title)}</span><span class="pill ${p.done===p.total?'green':'blue'}">${p.done}/${p.total}</span></summary>
+    <div class="items">${items.map(x=>itemHTML(group,x,meta)).join('')}</div></details>`
+}
+function renderStats(){
+  const f=state.farm||{};
+  const stats=[
+    ['Farmer', f.name||'Not imported'], ['Farm', f.farmName||'—'], ['Date', f.year?`${cap(f.season)} ${f.day}, Year ${f.year}`:'—'], ['Gold', f.money?Number(f.money).toLocaleString()+'g':'—'],
+    ['Deepest Mine', f.deepest||'—'], ['Farming', f.skills?.farming??'—'], ['Mining', f.skills?.mining??'—'], ['Fishing', f.skills?.fishing??'—']
+  ];
+  q('#stats').innerHTML=stats.map(([a,b])=>`<div class="stat"><div class="label">${esc(a)}</div><div class="value">${esc(b)}</div></div>`).join('');
+}
+function cap(s){return s?String(s).charAt(0).toUpperCase()+String(s).slice(1):''}
+function renderTabs(){
+  const tabs=[['dashboard','Dashboard'],['bundles','Bundles'],['achievements','Achievements'],['quests','Quests'],['collections','Collections'],['villagers','Villagers'],['notes','Notes']];
+  q('#tabs').innerHTML=tabs.map(([id,label])=>`<button class="tab ${id==='dashboard'?'active':''}" data-tab="${id}">${label}</button>`).join('');
+  qa('.tab').forEach(btn=>btn.onclick=()=>{qa('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');qa('.section').forEach(s=>s.classList.remove('active'));q('#'+btn.dataset.tab).classList.add('active')});
+}
+function renderDashboard(){
+  const bundleItems=bundleData.flatMap(b=>b.items);
+  const bp=progressFor('Bundles',bundleItems);
+  const ap=progressFor('Achievements',achievementData.map(a=>a[0]));
+  const qp=progressFor('Quests',questData.map(q=>q[0]));
+  const mp=progressFor('Minerals',minerals);
+  q('#dashboard').innerHTML=`
+  <div class="two">
+    ${dashCard('Community Center',bp,'Complete bundles and missing items.')} ${dashCard('Achievements',ap,'Steam achievement checklist with save inference + manual checks.')}
+    ${dashCard('Quests',qp,'Main quests and important special goals.')} ${dashCard('Minerals',mp,'Useful for Crystalarium museum reward progress.')}
+  </div>
+  <div class="card"><div class="miniTitle">Recommended next steps based on your playthrough</div>
+    <div class="items">
+      ${itemHTML('Goals','Build Lightning Rod for Battery Pack','Crystalarium goal')}
+      ${itemHTML('Goals','Use Jade in Crystalarium later','Trade Jade for Staircases on Sundays')}
+      ${itemHTML('Goals','Keep Lava Eel and Blobfish ponds growing','Passive income')}
+      ${itemHTML('Goals','Check Traveling Cart Friday and Sunday','Rabbit Foot / Catfish / Walleye / Battery Pack')}
+      ${itemHTML('Goals','Prepare Skull Cavern supplies','Food, bombs, coffee, staircases')}
+      ${itemHTML('Goals','Save for Strawberry Seeds on Spring 13','Egg Festival')}
+    </div></div>`;
+}
+function dashCard(title,p,desc){return `<div class="card"><div class="summaryRow ${p.done===p.total?'done':''}"><div><b>${esc(title)}</b><div class="note">${esc(desc)}</div><div class="bar"><span style="width:${p.pct}%"></span></div></div><span class="pill ${p.done===p.total?'green':'blue'}">${p.done}/${p.total}</span></div></div>`}
+function renderBundles(){
+  const rooms=[...new Set(bundleData.map(b=>b.room))];
+  q('#bundles').innerHTML=rooms.map(room=>{
+    const bs=bundleData.filter(b=>b.room===room); const all=bs.flatMap(b=>b.items); const p=progressFor('Bundles',all);
+    return `<div class="card" data-search="${esc(room.toLowerCase())}"><div class="summaryRow ${p.done===p.total?'done':''}"><div><b>${esc(room)}</b><div class="bar"><span style="width:${p.pct}%"></span></div></div><span class="pill ${p.done===p.total?'green':'blue'}">${p.done}/${p.total}</span></div>${bs.map(b=>detailsHTML(b.bundle,'Bundles',b.items)).join('')}</div>`;
+  }).join('');
+}
+function renderAchievements(){q('#achievements').innerHTML=`<div class="card">${detailsHTML('Steam Achievements','Achievements',achievementData.map(a=>a[0]))}</div>`}
+function renderQuests(){q('#quests').innerHTML=`<div class="card">${detailsHTML('Main Quests / Important Goals','Quests',questData.map(a=>a[0]))}</div>`}
+function renderCollections(){
+  q('#collections').innerHTML=`<div class="three"><div class="card">${detailsHTML('Minerals','Minerals',minerals)}</div><div class="card">${detailsHTML('Artifacts','Artifacts',artifacts)}</div><div class="card">${detailsHTML('Fish','Fish',fish)}</div></div>`
+}
+function renderVillagers(){
+  q('#villagers').innerHTML=`<div class="card"><div class="miniTitle">Villager Tracker</div><div class="note">Save parsing for exact hearts varies by save version. Use manual checks for now. Future version can read friendship values directly.</div><div class="items">${villagers.map(v=>itemHTML('Villagers',v,'Met / friendship tracking')).join('')}</div></div>`
+}
+function renderNotes(){
+  q('#notes').innerHTML=`<div class="card"><div class="miniTitle">GitHub / Local Privacy Notes</div>
+  <p class="note"><b>Safe for GitHub:</b> this file contains no private save data. It only reads a save after the user chooses it locally.</p>
+  <p class="note"><b>Browser rule:</b> a website cannot automatically read <code>%AppData%</code> without permission. The user must select the save file or folder at least once.</p>
+  <p class="note"><b>Refresh behavior:</b> Chrome/Edge may remember selected folder permission. If permission is still valid, Refresh Selected Save reads the newest local file immediately.</p>
+  <p class="note"><b>Best file:</b> choose the large file named exactly like the farm folder, for example <code>MyFarm_123456789</code>. Do not choose <code>SaveGameInfo</code>.</p>
+  </div>`
+}
+function render(){renderStats();renderTabs();renderDashboard();renderBundles();renderAchievements();renderQuests();renderCollections();renderVillagers();renderNotes();applySearch()}
+function applySearch(){const s=q('#search').value.trim().toLowerCase();qa('[data-search]').forEach(el=>{el.style.display=!s||el.dataset.search.includes(s)?'':'none'})}
+q('#search').addEventListener('input',applySearch);
+async function importFile(file){
+  if(!file) return;
+  const text=await file.text(); parseSave(text);
+  q('#status').innerHTML=`Imported <b>${esc(file.name)}</b>. Displaying local save progress now.`;
+  render();
+}
+q('#saveFile').addEventListener('change',e=>importFile(e.target.files[0]));
+async function getMainSaveFileFromDir(dir){
+  let candidates=[];
+  for await(const [name,handle] of dir.entries()){
+    if(handle.kind==='file' && name!=='SaveGameInfo' && !name.endsWith('_old') && !name.includes('.')) candidates.push(handle);
+  }
+  if(!candidates.length){
+    for await(const [name,handle] of dir.entries()) if(handle.kind==='file' && name!=='SaveGameInfo') candidates.push(handle);
+  }
+  return candidates[0];
+}
+q('#pickFolderBtn').onclick=async()=>{
+  if(!window.showDirectoryPicker){alert('Folder sync requires Chrome or Edge. Use Import Save File instead.');return;}
+  try{
+    state.dirHandle=await window.showDirectoryPicker();
+    state.fileHandle=await getMainSaveFileFromDir(state.dirHandle);
+    if(!state.fileHandle){alert('No save file found in that folder. Choose the folder inside Saves, like FarmName_123456789.');return;}
+    const file=await state.fileHandle.getFile(); await importFile(file);
+    await saveHandle('dir',state.dirHandle); await saveHandle('file',state.fileHandle);
+  }catch(err){console.warn(err)}
+};
+q('#refreshBtn').onclick=async()=>{
+  try{
+    if(!state.fileHandle) state.fileHandle=await loadHandle('file');
+    if(!state.fileHandle){alert('Select your save folder or import the save file first.');return;}
+    const perm=await state.fileHandle.queryPermission?.({mode:'read'});
+    if(perm!=='granted') await state.fileHandle.requestPermission?.({mode:'read'});
+    const file=await state.fileHandle.getFile(); await importFile(file);
+  }catch(err){alert('Could not refresh. Select your save folder again.');console.warn(err)}
+};
+q('#exportBtn').onclick=()=>{
+  const blob=new Blob([JSON.stringify({version:DATA_VERSION,manual:state.manual,farm:state.farm},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='stardew-tracker-data.json';a.click();URL.revokeObjectURL(a.href);
+};
+q('#resetBtn').onclick=()=>{if(confirm('Reset manual checkboxes? Auto-detected save progress will remain after import.')){state.manual={};saveManual();render()}};
+async function db(){return new Promise((res,rej)=>{const r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=()=>r.result.createObjectStore('handles');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function saveHandle(key,handle){const d=await db();return new Promise((res,rej)=>{const tx=d.transaction('handles','readwrite');tx.objectStore('handles').put(handle,key);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}
+async function loadHandle(key){try{const d=await db();return await new Promise((res,rej)=>{const tx=d.transaction('handles','readonly');const r=tx.objectStore('handles').get(key);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}catch{return null}}
+loadManual();render();
+</script>
+</body>
+</html>
