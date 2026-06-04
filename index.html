@@ -10,7 +10,7 @@
 </head>
 <body>
 <header><div class="wrap top"><div><h1>🌾 Stardew Companion Tracker</h1><p class="subtitle">Local save guide for forgetful perfection runs</p></div><div class="importBox"><label class="fileLabel">Import Save File<input id="fileInput" type="file" /></label><div class="note">C:\Users\[Username]\AppData\Roaming\StardewValley\Saves<br>Select <span class="kbd">FarmName_123456789</span></div></div></div></header>
-<main class="wrap"><div class="grid" id="dash"></div><div class="tabs"><button class="tab active" data-tab="goals">🎯 What Next?</button><button class="tab" data-tab="requests">📋 Requests</button><button class="tab" data-tab="ponds">🐟 Fish Ponds</button><button class="tab" data-tab="crafting">🛠️ Crafting</button><button class="tab" data-tab="cooking">🍳 Cooking</button><button class="tab" data-tab="letters">📬 Letters & Rewards</button><button class="tab" data-tab="books">📚 Books</button><button class="tab" data-tab="achievements">🏆 Achievements</button><button class="tab" data-tab="missing">🔎 Missing Help</button></div><section class="section active" id="goals"></section><section class="section" id="requests"></section><section class="section" id="ponds"></section><section class="section" id="crafting"></section><section class="section" id="cooking"></section><section class="section" id="letters"></section><section class="section" id="books"></section><section class="section" id="achievements"></section><section class="section" id="missing"></section><section class="section" id="diag"></section></main><div class="footer">Made with ChatGPT | Version 1.0 (2026-06-03)</div>
+<main class="wrap"><div class="grid" id="dash"></div><div class="tabs"><button class="tab active" data-tab="goals">🎯 What Next?</button><button class="tab" data-tab="requests">📋 Requests</button><button class="tab" data-tab="ready">✅ Ready Now</button><button class="tab" data-tab="fish">🎣 Fish</button><button class="tab" data-tab="ready">✅ Ready Now</button><button class="tab" data-tab="fish">🎣 Fish</button><button class="tab" data-tab="ponds">🐟 Fish Ponds</button><button class="tab" data-tab="crafting">🛠️ Crafting</button><button class="tab" data-tab="cooking">🍳 Cooking</button><button class="tab" data-tab="letters">📬 Letters & Rewards</button><button class="tab" data-tab="books">📚 Books</button><button class="tab" data-tab="achievements">🏆 Achievements</button><button class="tab" data-tab="missing">🔎 Missing Help</button></div><section class="section active" id="goals"></section><section class="section" id="requests"></section><section class="section" id="ready"></section><section class="section" id="fish"></section><section class="section" id="ready"></section><section class="section" id="fish"></section><section class="section" id="ponds"></section><section class="section" id="crafting"></section><section class="section" id="cooking"></section><section class="section" id="letters"></section><section class="section" id="books"></section><section class="section" id="achievements"></section><section class="section" id="missing"></section><section class="section" id="diag"></section></main><div class="footer">Made with ChatGPT | Version 1.0 (2026-06-03)</div>
 <script>
 const ICON_MAP={
 "Wild Seeds (Sp)":"Spring Seeds","Wild Seeds (Su)":"Summer Seeds","Wild Seeds (Fa)":"Fall Seeds","Wild Seeds (Wi)":"Winter Seeds",
@@ -167,7 +167,7 @@ function verifyAchievements(root,player,ids){
 }
 
 const BOOKS=[{key:"Book_Void",name:"Mapping Cave Systems",img:"Mapping_Cave_Systems"},{key:"Book_Mystery",name:"Book of Mysteries",img:"Book_of_Mysteries"},{key:"Book_PriceCatalogue",name:"Price Catalogue",img:"Price_Catalogue"},{key:"Book_AnimalCatalogue",name:"Animal Catalogue",img:"Animal_Catalogue"},{key:"Book_Bombs",name:"Dwarvish Safety Manual",img:"Dwarvish_Safety_Manual"},{key:"Book_Roe",name:"Jewels Of The Sea",img:"Jewels_Of_The_Sea"},{key:"Book_WildSeeds",name:"Raccoon Journal",img:"Ways_Of_The_Wild"},{key:"Book_Woodcutting",name:"Woody's Secret",img:"Woody's_Secret"},{key:"Book_Defense",name:"Jack Be Nimble, Jack Be Thick",img:"Jack_Be_Nimble,_Jack_Be_Thick"},{key:"Book_Speed",name:"Way Of The Wind",img:"Way_Of_The_Wind_pt._1"},{key:"Book_Diamonds",name:"Diamond Hunter",img:"The_Diamond_Hunter"},{key:"Book_Crabbing",name:"The Art O' Crabbing",img:"The_Art_O'_Crabbing"},{key:"Book_Trash",name:"The Alleyway Buffet",img:"The_Alleyway_Buffet"}];
-const ITEM_NAMES={"162":"Lava Eel","800":"Blobfish","140":"Walleye","698":"Sturgeon","155":"Super Cucumber","393":"Coral","570":"Basalt","82":"Fire Quartz","336":"Gold Bar","72":"Diamond","721":"Snail","604":"Plum Pudding","618":"Bruschetta","390":"Stone","66":"Amethyst","64":"Ruby","60":"Emerald","62":"Aquamarine","70":"Jade","749":"Omni Geode","535":"Geode","536":"Frozen Geode","537":"Magma Geode","787":"Battery Pack","766":"Slime","767":"Bat Wing","768":"Solar Essence","769":"Void Essence","20":"Leek","303":"Pale Ale","634":"Apricot","709":"Hardwood"};
+const ITEM_NAMES={"128":"Pufferfish","129":"Anchovy","130":"Tuna","131":"Sardine","132":"Bream","136":"Largemouth Bass","137":"Smallmouth Bass","138":"Rainbow Trout","139":"Salmon","141":"Perch","142":"Carp","143":"Catfish","144":"Pike","145":"Sunfish","146":"Red Mullet","147":"Herring","148":"Eel","149":"Octopus","150":"Red Snapper","151":"Squid","152":"Seaweed","153":"Green Algae","154":"Sea Cucumber","156":"Ghostfish","157":"White Algae","158":"Stonefish","159":"Crimsonfish","160":"Angler","161":"Ice Pip","163":"Legend","164":"Sandfish","165":"Scorpion Carp","267":"Flounder","269":"Midnight Carp","682":"Mutant Carp","698":"Sturgeon","699":"Tiger Trout","700":"Bullhead","701":"Tilapia","702":"Chub","704":"Dorado","705":"Albacore","706":"Shad","707":"Lingcod","708":"Halibut","715":"Lobster","716":"Crayfish","717":"Crab","718":"Cockle","719":"Mussel","720":"Shrimp","721":"Snail","722":"Periwinkle","723":"Oyster","734":"Woodskip","775":"Glacierfish","795":"Void Salmon","796":"Slimejack","798":"Midnight Squid","799":"Spook Fish","800":"Blobfish","836":"Stingray","837":"Lionfish","838":"Blue Discus","898":"Son of Crimsonfish","899":"Ms. Angler","900":"Legend II","901":"Radioactive Carp","902":"Glacierfish Jr.","162":"Lava Eel","800":"Blobfish","140":"Walleye","698":"Sturgeon","155":"Super Cucumber","393":"Coral","570":"Basalt","82":"Fire Quartz","336":"Gold Bar","72":"Diamond","721":"Snail","604":"Plum Pudding","618":"Bruschetta","390":"Stone","66":"Amethyst","64":"Ruby","60":"Emerald","62":"Aquamarine","70":"Jade","749":"Omni Geode","535":"Geode","536":"Frozen Geode","537":"Magma Geode","787":"Battery Pack","766":"Slime","767":"Bat Wing","768":"Solar Essence","769":"Void Essence","20":"Leek","303":"Pale Ale","634":"Apricot","709":"Hardwood"};
 const HELP={"Battery Pack":"Craft Lightning Rods and wait for thunderstorms. Also check Traveling Cart Friday/Sunday.","Basalt":"Open Magma Geodes from mine floors 81-119. About 1 in 26 chance.","Coral":"Forage on the beach. Also check the tide pool side after bridge repair.","Snail":"Use Crab Pots in freshwater: river, lake, or mountain lake. Add bait and check next day.","Walleye":"Fall rain, 12 PM to 2 AM, river/lake/forest pond. In Winter use Rain Totem or Traveling Cart.","Catfish":"Spring/Fall rain, river, any time. Also Secret Woods in rain or Traveling Cart.","Rabbit's Foot":"Rabbit in Deluxe Coop, Serpent drop in Skull Cavern, or Traveling Cart.","Cactus Fruit":"Forage in Calico Desert after bus repair.","Coconut":"Forage in Calico Desert after bus repair.","Jade":"Mines/geodes. Best in Crystalarium; trade to Desert Trader on Sundays for Staircases.","Ruby":"Mines/geodes. Trade at Desert Trader for Spicy Eel."};
 const $=id=>document.getElementById(id);const q=(node,sel)=>node?node.querySelector(sel):null;const txt=(node,sel)=>{let e=q(node,sel);return e?e.textContent:null};
 function direct(node,tag){if(!node)return null;for(const c of node.children){if(c.tagName===tag)return c.textContent}return null}
@@ -268,8 +268,171 @@ function renderRequests(data){
  $('requests').innerHTML=`<div class="card span12"><h2 class="visualTitle"><span class="emoji">📋</span><span>Requests & Special Orders</span></h2><p class="mini">Tracks requests you accepted and requests currently offered but not accepted yet. Difficulty is estimated from the save, item type, and basic Stardew sources.</p><input class="search" placeholder="Search requests..." oninput="filterCards(this,'requestList')"><br><br><h3>Accepted</h3><div class="items" id="requestList">${accepted.map(card).join('')||'<div class="empty">No accepted requests detected.</div>'}</div><br><h3>Available / Not Accepted</h3><div class="items">${available.map(card).join('')||'<div class="empty">No available board requests detected in save.</div>'}</div></div>`;
 }
 
+
+const MATERIAL_HELP={
+"Wood":"Chop trees, stumps, branches, or buy from Robin.",
+"Stone":"Break rocks in the mines, farm, quarry, or buy from Robin.",
+"Fiber":"Cut weeds in mines, farm, forest, or grow Fiber Seeds.",
+"Coal":"Mine carts/bags, Dust Sprites, Charcoal Kiln, or buy from Clint.",
+"Clay":"Hoe dirt/artifact spots, dig soil in mines, or open geodes.",
+"Copper Ore":"Mine floors 2-39 or buy from Clint.",
+"Iron Ore":"Mine floors 40-79 or buy from Clint.",
+"Gold Ore":"Mine floors 80-119, Skull Cavern, or buy from Clint.",
+"Iridium Ore":"Skull Cavern, geodes, meteorite, or Statue of Perfection later.",
+"Copper Bar":"Smelt 5 Copper Ore + 1 Coal.",
+"Iron Bar":"Smelt 5 Iron Ore + 1 Coal.",
+"Gold Bar":"Smelt 5 Gold Ore + 1 Coal.",
+"Iridium Bar":"Smelt 5 Iridium Ore + 1 Coal.",
+"Refined Quartz":"Recycle trash/CD/glasses or smelt Quartz/Fire Quartz.",
+"Battery Pack":"Lightning Rod after thunderstorms; sometimes Traveling Cart.",
+"Bat Wing":"Kill bats in the mines.",
+"Solar Essence":"Ghosts, squids, mummies, Krobus, or monster drops.",
+"Void Essence":"Shadow monsters in mines 80+, Krobus, or monster drops.",
+"Hardwood":"Secret Woods stumps, mahogany trees, farm stumps/logs.",
+"Maple Syrup":"Tap Maple Trees.",
+"Oak Resin":"Tap Oak Trees.",
+"Pine Tar":"Tap Pine Trees.",
+"Slime":"Kill slimes.",
+"Sea Cucumber":"Ocean fishing Fall/Winter 6 AM-7 PM.",
+"Blue Jazz":"Grow in Spring or buy at Flower Dance sometimes.",
+"Tortilla":"Cook from Corn or buy from Saloon on some days.",
+"Egg":"Chicken egg.",
+"Milk":"Cow milk.",
+"Cheese":"Put Milk in Cheese Press.",
+"Apricot":"Apricot tree in Spring, Fruit Bat Cave, or Traveling Cart.",
+"Hops":"Grow in Summer; use trellis.",
+"Leek":"Spring forage.",
+"Coral":"Beach forage.",
+"Snail":"Freshwater Crab Pot."
+};
+const CRAFT_MATS={
+"Chest":{"Wood":50},"Stone Chest":{"Stone":50},"Big Chest":{"Wood":120,"Copper Bar":2},"Wood Fence":{"Wood":2},"Stone Fence":{"Stone":2},"Gate":{"Wood":10},
+"Torch":{"Wood":1,"Sap":2},"Campfire":{"Stone":10,"Wood":10,"Fiber":10},"Wood Path":{"Wood":1},"Gravel Path":{"Stone":1},"Cobblestone Path":{"Stone":1},
+"Field Snack":{"Acorn":1,"Maple Seed":1,"Pine Cone":1},"Scarecrow":{"Wood":50,"Coal":1,"Fiber":20},"Furnace":{"Stone":25,"Copper Ore":20},
+"Charcoal Kiln":{"Wood":20,"Copper Bar":2},"Recycling Machine":{"Wood":25,"Stone":25,"Iron Bar":1},"Tapper":{"Wood":40,"Copper Bar":2},
+"Mayonnaise Machine":{"Wood":15,"Stone":15,"Earth Crystal":1,"Copper Bar":1},"Bee House":{"Wood":40,"Coal":8,"Iron Bar":1,"Maple Syrup":1},
+"Preserves Jar":{"Wood":50,"Stone":40,"Coal":8},"Cheese Press":{"Wood":45,"Stone":45,"Hardwood":10,"Copper Bar":1},
+"Loom":{"Wood":60,"Fiber":30,"Pine Tar":1},"Keg":{"Wood":30,"Copper Bar":1,"Iron Bar":1,"Oak Resin":1},"Oil Maker":{"Slime":50,"Hardwood":20,"Gold Bar":1},
+"Seed Maker":{"Wood":25,"Coal":10,"Gold Bar":1},"Quality Sprinkler":{"Iron Bar":1,"Gold Bar":1,"Refined Quartz":1},
+"Iridium Sprinkler":{"Gold Bar":1,"Iridium Bar":1,"Battery Pack":1},"Lightning Rod":{"Iron Bar":1,"Refined Quartz":1,"Bat Wing":5},
+"Crystalarium":{"Stone":99,"Gold Bar":5,"Iridium Bar":2,"Battery Pack":1},"Slime Egg-Press":{"Coal":25,"Fire Quartz":1,"Battery Pack":1},
+"Slime Incubator":{"Iridium Bar":2,"Slime":100},"Cherry Bomb":{"Copper Ore":4,"Coal":1},"Bomb":{"Iron Ore":4,"Coal":1},
+"Mega Bomb":{"Gold Ore":4,"Solar Essence":1,"Void Essence":1},"Staircase":{"Stone":99},"Life Elixir":{"Red Mushroom":1,"Purple Mushroom":1,"Morel":1,"Chanterelle":1},
+"Rain Totem":{"Hardwood":1,"Truffle Oil":1,"Pine Tar":5},"Warp Totem: Farm":{"Hardwood":1,"Honey":1,"Fiber":20},"Warp Totem: Mountains":{"Hardwood":1,"Iron Bar":1,"Stone":25},
+"Warp Totem: Beach":{"Hardwood":1,"Coral":2,"Fiber":10},"Warp Totem: Desert":{"Hardwood":2,"Coconut":1,"Iridium Ore":4}
+};
+const COOK_MATS={
+"Fried Egg":{"Egg":1},"Omelet":{"Egg":1,"Milk":1},"Salad":{"Leek":1,"Dandelion":1,"Vinegar":1},"Cheese Cauliflower":{"Cauliflower":1,"Cheese":1},
+"Baked Fish":{"Sunfish":1,"Bream":1,"Wheat Flour":1},"Parsnip Soup":{"Parsnip":1,"Milk":1,"Vinegar":1},"Vegetable Medley":{"Tomato":1,"Beet":1},
+"Complete Breakfast":{"Fried Egg":1,"Milk":1,"Hashbrowns":1,"Pancakes":1},"Fried Calamari":{"Squid":1,"Wheat Flour":1,"Oil":1},
+"Lucky Lunch":{"Sea Cucumber":1,"Tortilla":1,"Blue Jazz":1},"Fried Mushroom":{"Common Mushroom":1,"Morel":1,"Oil":1},"Pizza":{"Wheat Flour":1,"Tomato":1,"Cheese":1},
+"Bean Hotpot":{"Green Bean":2},"Glazed Yams":{"Yam":1,"Sugar":1},"Hashbrowns":{"Potato":1,"Oil":1},"Pancakes":{"Wheat Flour":1,"Egg":1},
+"Salmon Dinner":{"Salmon":1,"Amaranth":1,"Kale":1},"Fish Taco":{"Tuna":1,"Tortilla":1,"Red Cabbage":1,"Mayonnaise":1},
+"Crispy Bass":{"Largemouth Bass":1,"Wheat Flour":1,"Oil":1},"Pepper Poppers":{"Hot Pepper":1,"Cheese":1},"Bread":{"Wheat Flour":1},
+"Tom Kha Soup":{"Coconut":1,"Shrimp":1,"Common Mushroom":1},"Trout Soup":{"Rainbow Trout":1,"Green Algae":1},"Chocolate Cake":{"Wheat Flour":1,"Sugar":1,"Egg":1},
+"Pink Cake":{"Melon":1,"Wheat Flour":1,"Sugar":1,"Egg":1},"Rhubarb Pie":{"Rhubarb":1,"Wheat Flour":1,"Sugar":1},"Cookie":{"Wheat Flour":1,"Sugar":1,"Egg":1},
+"Spaghetti":{"Wheat Flour":1,"Tomato":1},"Fried Eel":{"Eel":1,"Oil":1},"Spicy Eel":{"Eel":1,"Hot Pepper":1},"Sashimi":{"Any Fish":1},
+"Maki Roll":{"Any Fish":1,"Seaweed":1,"Rice":1},"Tortilla":{"Corn":1},"Red Plate":{"Red Cabbage":1,"Radish":1},"Eggplant Parmesan":{"Eggplant":1,"Tomato":1},
+"Rice Pudding":{"Milk":1,"Sugar":1,"Rice":1},"Ice Cream":{"Milk":1,"Sugar":1},"Blueberry Tart":{"Blueberry":1,"Wheat Flour":1,"Sugar":1,"Egg":1},
+"Autumn's Bounty":{"Yam":1,"Pumpkin":1},"Pumpkin Soup":{"Pumpkin":1,"Milk":1},"Super Meal":{"Bok Choy":1,"Cranberries":1,"Artichoke":1},
+"Cranberry Sauce":{"Cranberries":1,"Sugar":1},"Stuffing":{"Bread":1,"Cranberries":1,"Hazelnut":1},"Farmer's Lunch":{"Omelet":1,"Parsnip":1},
+"Survival Burger":{"Bread":1,"Cave Carrot":1,"Eggplant":1},"Dish O' The Sea":{"Sardine":2,"Hashbrowns":1},"Miner's Treat":{"Cave Carrot":2,"Sugar":1,"Milk":1},
+"Roots Platter":{"Cave Carrot":1,"Winter Root":1},"Seafoam Pudding":{"Flounder":1,"Midnight Carp":1,"Squid Ink":1}
+};
+const FISH_LIST=[
+{id:"128",name:"Pufferfish",where:"Ocean",when:"Summer sunny, 12 PM-4 PM"},
+{id:"129",name:"Anchovy",where:"Ocean",when:"Spring/Fall"},
+{id:"130",name:"Tuna",where:"Ocean",when:"Summer/Winter 6 AM-7 PM"},
+{id:"131",name:"Sardine",where:"Ocean",when:"Spring/Fall/Winter 6 AM-7 PM"},
+{id:"132",name:"Bream",where:"River",when:"All seasons 6 PM-2 AM"},
+{id:"136",name:"Largemouth Bass",where:"Mountain Lake",when:"All seasons 6 AM-7 PM"},
+{id:"137",name:"Smallmouth Bass",where:"River/Forest Pond",when:"Spring/Fall"},
+{id:"138",name:"Rainbow Trout",where:"River/Mountain Lake",when:"Summer sunny 6 AM-7 PM"},
+{id:"139",name:"Salmon",where:"River",when:"Fall 6 AM-7 PM"},
+{id:"140",name:"Walleye",where:"River/Lake/Forest Pond",when:"Fall rain 12 PM-2 AM"},
+{id:"141",name:"Perch",where:"River/Lake/Forest Pond",when:"Winter"},
+{id:"142",name:"Carp",where:"Mountain Lake/Secret Woods/Sewer",when:"Any time"},
+{id:"143",name:"Catfish",where:"River/Secret Woods",when:"Spring/Fall rain"},
+{id:"144",name:"Pike",where:"River/Forest Pond",when:"Summer/Winter"},
+{id:"145",name:"Sunfish",where:"River",when:"Spring/Summer sunny 6 AM-7 PM"},
+{id:"146",name:"Red Mullet",where:"Ocean",when:"Summer/Winter 6 AM-7 PM"},
+{id:"147",name:"Herring",where:"Ocean",when:"Spring/Winter"},
+{id:"148",name:"Eel",where:"Ocean",when:"Spring/Fall rain 4 PM-2 AM"},
+{id:"149",name:"Octopus",where:"Ocean",when:"Summer 6 AM-1 PM"},
+{id:"150",name:"Red Snapper",where:"Ocean",when:"Summer/Fall rain 6 AM-7 PM"},
+{id:"151",name:"Squid",where:"Ocean",when:"Winter 6 PM-2 AM"},
+{id:"154",name:"Sea Cucumber",where:"Ocean",when:"Fall/Winter 6 AM-7 PM"},
+{id:"155",name:"Super Cucumber",where:"Ocean",when:"Summer/Fall 6 PM-2 AM"},
+{id:"156",name:"Ghostfish",where:"Mines",when:"Any time"},
+{id:"158",name:"Stonefish",where:"Mines floor 20",when:"Any time"},
+{id:"159",name:"Crimsonfish",where:"East Pier",when:"Summer"},
+{id:"160",name:"Angler",where:"North Joja bridge",when:"Fall"},
+{id:"161",name:"Ice Pip",where:"Mines floor 60",when:"Any time"},
+{id:"162",name:"Lava Eel",where:"Mines floor 100 / Volcano",when:"Any time"},
+{id:"163",name:"Legend",where:"Mountain Lake",when:"Spring rain"},
+{id:"164",name:"Sandfish",where:"Desert pond",when:"6 AM-8 PM"},
+{id:"165",name:"Scorpion Carp",where:"Desert pond",when:"6 AM-8 PM"},
+{id:"267",name:"Flounder",where:"Ocean",when:"Spring/Summer 6 AM-8 PM"},
+{id:"269",name:"Midnight Carp",where:"Mountain Lake/Forest Pond",when:"Fall/Winter 10 PM-2 AM"},
+{id:"682",name:"Mutant Carp",where:"Sewer",when:"Any time"},
+{id:"698",name:"Sturgeon",where:"Mountain Lake",when:"Summer/Winter 6 AM-7 PM"},
+{id:"699",name:"Tiger Trout",where:"River",when:"Fall/Winter 6 AM-7 PM"},
+{id:"700",name:"Bullhead",where:"Mountain Lake",when:"Any time"},
+{id:"701",name:"Tilapia",where:"Ocean",when:"Summer/Fall 6 AM-2 PM"},
+{id:"702",name:"Chub",where:"Mountain Lake/River",when:"Any time"},
+{id:"704",name:"Dorado",where:"Forest River",when:"Summer 6 AM-7 PM"},
+{id:"705",name:"Albacore",where:"Ocean",when:"Fall/Winter morning or night"},
+{id:"706",name:"Shad",where:"River",when:"Spring/Summer/Fall rain 9 AM-2 AM"},
+{id:"707",name:"Lingcod",where:"River/Lake",when:"Winter"},
+{id:"708",name:"Halibut",where:"Ocean",when:"Spring/Summer/Winter"},
+{id:"734",name:"Woodskip",where:"Secret Woods",when:"Any time"},
+{id:"775",name:"Glacierfish",where:"Cindersap Forest",when:"Winter"},
+{id:"795",name:"Void Salmon",where:"Witch's Swamp",when:"Any time"},
+{id:"796",name:"Slimejack",where:"Mutant Bug Lair",when:"Any time"},
+{id:"798",name:"Midnight Squid",where:"Night Market Submarine",when:"Winter 15-17"},
+{id:"799",name:"Spook Fish",where:"Night Market Submarine",when:"Winter 15-17"},
+{id:"800",name:"Blobfish",where:"Night Market Submarine",when:"Winter 15-17"},
+{id:"836",name:"Stingray",where:"Pirate Cove",when:"Any time"},
+{id:"837",name:"Lionfish",where:"Ginger Island Ocean",when:"Any time"},
+{id:"838",name:"Blue Discus",where:"Ginger Island Pond/River",when:"Any time"}
+];
+function hasMaterials(inv, mats){
+ const missing=[];
+ Object.entries(mats||{}).forEach(([name,need])=>{
+   let have=inv[name]||inv[normId(name)]||0;
+   if(name==="Any Fish") have=FISH_LIST.reduce((a,f)=>a+(inv[f.id]||inv[f.name]||0),0);
+   if(have<need) missing.push({name,need,have,where:MATERIAL_HELP[name]||"Check Stardew Wiki or shops/foraging."});
+ });
+ return missing;
+}
+function parseFishCaught(root){
+ const out={};
+ root.querySelectorAll('fishCaught > item').forEach(it=>{
+   const id=txt(it,'key > int')||txt(it,'key > string');
+   const nums=[...it.querySelectorAll('value int')].map(x=>parseInt(x.textContent)).filter(n=>!isNaN(n));
+   const count=nums.reduce((a,b)=>a+b,0);
+   if(id && count>0) out[normId(id)]=count;
+ });
+ return out;
+}
+function renderReady(data){
+ const inv=data.inventory||{};
+ const craftRows=CRAFTING.filter(n=>data.crafting[n]!==undefined && !((data.crafting[n]||0)>0)).map(n=>({type:"Crafting",name:n,missing:hasMaterials(inv,CRAFT_MATS[n])})).filter(x=>CRAFT_MATS[x.name]);
+ const cookRows=COOKING.filter(n=>data.cookingLearned[n]!==undefined && !((data.cooked[n]||0)>0)).map(n=>({type:"Cooking",name:n,missing:hasMaterials(inv,COOK_MATS[n])})).filter(x=>COOK_MATS[x.name]);
+ const rows=[...craftRows,...cookRows].sort((a,b)=>a.missing.length-b.missing.length);
+ const card=r=>`<div class="item ${r.missing.length?'partial':'done'}" data-name="${(r.name+' '+r.type).toLowerCase()}"><div class="itemPic">${img(r.name,'✅')}</div><div><div class="itemTitle">${r.name}</div><div class="itemSub">${r.type} • ${r.missing.length?'Missing '+r.missing.length+' item type(s)':'Ready now'}</div>${r.missing.length?`<div class="help"><b>Missing:</b><br>${r.missing.map(m=>`${m.name}: ${m.have}/${m.need}<br><span class="mini">${m.where}</span>`).join('<br>')}</div>`:`<div class="help"><b>You have everything needed.</b> Make this now to complete progress.</div>`}</div></div>`;
+ $('ready').innerHTML=`<div class="card span12"><h2 class="visualTitle"><span class="emoji">✅</span><span>Ready Now: Crafting & Cooking</span></h2><p class="mini">Checks learned recipes against detected inventory/storage items in the save. Shows what is ready now and what materials are missing.</p><input class="search" placeholder="Search ready/craft/cook..." oninput="filterCards(this,'readyList')"><br><br><div class="items" id="readyList">${rows.map(card).join('')||'<div class="empty">No learned incomplete recipes with material data available yet.</div>'}</div></div>`;
+}
+function renderFish(data){
+ const caught=data.fishCaught||{};
+ const done=FISH_LIST.filter(f=>caught[f.id]);
+ const missing=FISH_LIST.filter(f=>!caught[f.id]);
+ const card=(f,ok)=>`<div class="item ${ok?'done':'missing'}" data-name="${f.name.toLowerCase()}"><div class="itemPic">${img(f.name,'🎣')}</div><div><div class="itemTitle">${f.name}</div><div class="itemSub">${ok?'Caught '+caught[f.id]+' time(s)':'Not caught yet'}</div><div class="help"><b>Where:</b> ${f.where}<br><b>When:</b> ${f.when}</div></div></div>`;
+ $('fish').innerHTML=`<div class="card span12"><h2 class="visualTitle"><span class="emoji">🎣</span><span>Fish Collection</span></h2><p class="mini">Shows fish caught from the save file and fish still missing, with where/when hints.</p><div class="countGrid"><div class="countBox"><b>${done.length}</b>Caught</div><div class="countBox"><b>${missing.length}</b>Missing</div><div class="countBox"><b>${FISH_LIST.length}</b>Tracked Fish</div></div><input class="search" placeholder="Search fish..." oninput="filterCards(this,'fishList')"><br><br><div class="items" id="fishList">${done.map(f=>card(f,true)).join('')}${missing.map(f=>card(f,false)).join('')}</div></div>`;
+}
+
 function render(data){const craftedDone=CRAFTING.filter(n=>(data.crafting[n]||0)>0 || isManual('crafting',n)).length;const craftedLearned=CRAFTING.filter(n=>data.crafting[n]!==undefined).length;const cookedDone=COOKING.filter(n=>(data.cooked[n]||0)>0 || isManual('cooking',n)).length;const cookingLearned=COOKING.filter(n=>data.cookingLearned[n]!==undefined).length;const bookDone=BOOKS.filter(b=>(data.booksRead&&data.booksRead[b.key])||data.mail.some(f=>f.includes(b.key))||isManual('books',b.name)).length;const achDone=data.achVerified ? Object.values(data.achVerified).filter(x=>x.done).length : data.achievements.length;
-$('dash').innerHTML=stat('🏡','Farm',data.farmName||'Unknown',data.playerName||'Player','')+stat('📅','Date',`${seasonName(data.season)} ${data.day}, Year ${data.year}`,'','')+stat('💰','Gold',Number(data.money||0).toLocaleString(),'Current money','')+stat('🐟','Ponds',data.ponds.length,data.ponds.length?'Detected on farm':'None detected','')+stat('🛠️','Crafting',`${craftedDone}/${CRAFTING.length}`,`${craftedLearned} learned • ${craftedDone} crafted`,'')+stat('🍳','Cooking',`${cookedDone}/${COOKING.length}`,`${cookingLearned} learned • ${cookedDone} cooked`,'')+stat('📚','Books',`${bookDone}/${BOOKS.length}`,'Save detected','')+stat('🏆','Achievements',`${achDone}/49`,'verified from save','');renderGoals(data);renderRequests(data);renderPonds(data);renderCrafting(data);renderCooking(data);renderLetters(data);renderBooks(data);renderAchievements(data);renderMissing(data);renderManual();renderDiag(data)}
+$('dash').innerHTML=stat('🏡','Farm',data.farmName||'Unknown',data.playerName||'Player','')+stat('📅','Date',`${seasonName(data.season)} ${data.day}, Year ${data.year}`,'','')+stat('💰','Gold',Number(data.money||0).toLocaleString(),'Current money','')+stat('🐟','Ponds',data.ponds.length,data.ponds.length?'Detected on farm':'None detected','')+stat('🛠️','Crafting',`${craftedDone}/${CRAFTING.length}`,`${craftedLearned} learned • ${craftedDone} crafted`,'')+stat('🍳','Cooking',`${cookedDone}/${COOKING.length}`,`${cookingLearned} learned • ${cookedDone} cooked`,'')+stat('📚','Books',`${bookDone}/${BOOKS.length}`,'Save detected','')+stat('🏆','Achievements',`${achDone}/49`,'verified from save','');renderGoals(data);renderRequests(data);renderReady(data);renderFish(data);renderPonds(data);renderCrafting(data);renderCooking(data);renderLetters(data);renderBooks(data);renderAchievements(data);renderMissing(data);renderManual();renderDiag(data)}
 function renderCrafting(data){const learned=CRAFTING.filter(n=>data.crafting[n]!==undefined).length,done=CRAFTING.filter(n=>(data.crafting[n]||0)>0 || isManual('crafting',n)).length;$('crafting').innerHTML=`<div class="card span12"><h2 class="visualTitle"><span class="emoji">🛠️</span><span>Crafting: Learned vs Crafted</span></h2><p class="mini">Important: learned recipe and actually crafted are different in the save. Count 0 means learned but never crafted.</p><div class="legend">${statusPill('Learned + Crafted','yes')}${statusPill('Learned Only','warn')}${statusPill('Not Learned','no')}${statusPill('','blue')}</div><div class="countGrid"><div class="countBox"><b>${learned}</b>Learned</div><div class="countBox"><b>${done}</b>Crafted</div><div class="countBox"><b>${CRAFTING.length-done}</b>Not crafted yet</div></div><input class="search" placeholder="Search crafting..." oninput="filterCards(this,'craftList')"><br><br><div class="items" id="craftList">${CRAFTING.map(n=>recipeCard('crafting',n,data.crafting[n])).join('')}</div></div>`}
 function renderCooking(data){const learned=COOKING.filter(n=>data.cookingLearned[n]!==undefined).length,done=COOKING.filter(n=>(data.cooked[n]||0)>0 || isManual('cooking',n)).length;$('cooking').innerHTML=`<div class="card span12"><h2 class="visualTitle"><span class="emoji">🍳</span><span>Cooking: Learned vs Cooked</span></h2><p class="mini">This uses cookingRecipes for learned recipes and recipesCooked for actual cooked dishes.</p><div class="legend">${statusPill('Learned + Cooked','yes')}${statusPill('Learned Only','warn')}${statusPill('Not Learned','no')}${statusPill('','blue')}</div><div class="countGrid"><div class="countBox"><b>${learned}</b>Learned</div><div class="countBox"><b>${done}</b>Cooked</div><div class="countBox"><b>${COOKING.length-done}</b>Not cooked yet</div></div><input class="search" placeholder="Search cooking..." oninput="filterCards(this,'cookList')"><br><br><div class="items" id="cookList">${COOKING.map(n=>recipeCard('cooking',n,data.cooked[n],data.cookingLearned[n]!==undefined)).join('')}</div></div>`}
 function recipeCard(section,name,count,learnedOverride){let learned=(section==='crafting')?count!==undefined:learnedOverride;let completed=(parseInt(count)||0)>0||isManual(section,name);let state=completed?'done':learned?'partial':'missing';let sub=completed?`${section==='crafting'?'Crafted':'Cooked'} ${parseInt(count)||0} time(s)`:learned?'Learned, but not completed yet':'Not learned yet';return `<div class="item ${cardCls(state)} ${isManual(section,name)?'':''}" data-name="${name.toLowerCase()}"><div class="itemPic">${img(name,completed?'✅':'?')}</div><div><div class="itemTitle">${name}</div><div class="itemSub">${learned?statusPill('Learned','purple'):statusPill('Not learned','no')} ${completed?statusPill(section==='crafting'?'Crafted':'Cooked','yes'):statusPill(section==='crafting'?'Not crafted':'Not cooked','warn')}</div><div class="itemSub">${sub}</div>${!completed&&!learned?`<div class="help">${section==='cooking'?'Find recipe from TV, mail, friendship, shop, or festival.':'Learn this recipe from skills, shops, quests, mail, or special unlocks.'}</div>`:''}</div></div>`}
@@ -285,10 +448,10 @@ function renderGoals(data){const goals=[];data.ponds.forEach(p=>{if(p.needed&&p.
 function renderDiag(data){$('diag').innerHTML=`<div class="card span12"><h2>⚙️ Parser Diagnostics</h2><p class="mini">Use this when something looks wrong.</p><pre class="diag">${escapeHtml(JSON.stringify({file:data.fileName,player:data.playerName,farm:data.farmName,year:data.year,day:data.day,season:data.season,seasonSource:data.sources.season,achievementIds:data.achievements,rawAchievementCount:data.achievements.length,verifiedAchievementCount:data.achVerified?Object.values(data.achVerified).filter(x=>x.done).length:data.achievements.length,achievementStats:data.achStats,craftingLearned:Object.keys(data.crafting).length,craftingActuallyCrafted:Object.values(data.crafting).filter(v=>parseInt(v)>0).length,cookingLearned:Object.keys(data.cookingLearned).length,cookedDishes:Object.keys(data.cooked).length,mailCount:data.mail.length,booksRead:data.booksRead,bookCount:Object.keys(data.booksRead||{}).length,ponds:data.ponds},null,2))}</pre></div>`}
 function escapeHtml(s){return s.replace(/[&<>]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]))}
 function filterCards(input,listId){const q=input.value.toLowerCase();[...$(listId).children].forEach(c=>c.style.display=c.dataset.name.includes(q)?'flex':'none')}
-function parseSave(text,fileName){const root=new DOMParser().parseFromString(text,'text/xml');if(root.querySelector('parsererror'))throw new Error('XML parse error');const player=root.querySelector('player')||root;const season=firstText(root,['currentSeason','season','seasonForSaveGame']);const year=firstText(root,['year']);const day=firstText(root,['dayOfMonth','day']);const crafting=dictByName(root,'craftingRecipes');const cookingLearned=dictByName(root,'cookingRecipes');const cooked=cookedDict(root);const achIds=achievements(root);const achV=verifyAchievements(root,player,achIds);const statsMap=customStats(root);const booksRead=bookMapFromStats(statsMap);const data={fileName,playerName:direct(player,'name')||txt(player,'name'),farmName:direct(player,'farmName')||txt(player,'farmName'),year:year.value,season:season.value,day:day.value,money:direct(player,'money')||txt(player,'money')||txt(root,'money')||0,crafting,cookingLearned,cooked,statsMap,booksRead,mail:mail(root),requests:parseRequests(root,invCounts(root)),ponds:parsePonds(root),achievements:achIds,achVerified:achV.verified,achStats:achV.stats,sources:{season:season.source,year:year.source,day:day.source}};window.lastData=data;return data}
+function parseSave(text,fileName){const root=new DOMParser().parseFromString(text,'text/xml');if(root.querySelector('parsererror'))throw new Error('XML parse error');const player=root.querySelector('player')||root;const season=firstText(root,['currentSeason','season','seasonForSaveGame']);const year=firstText(root,['year']);const day=firstText(root,['dayOfMonth','day']);const crafting=dictByName(root,'craftingRecipes');const cookingLearned=dictByName(root,'cookingRecipes');const cooked=cookedDict(root);const achIds=achievements(root);const achV=verifyAchievements(root,player,achIds);const statsMap=customStats(root);const booksRead=bookMapFromStats(statsMap);const data={fileName,playerName:direct(player,'name')||txt(player,'name'),farmName:direct(player,'farmName')||txt(player,'farmName'),year:year.value,season:season.value,day:day.value,money:direct(player,'money')||txt(player,'money')||txt(root,'money')||0,crafting,cookingLearned,cooked,statsMap,booksRead,mail:mail(root),inventory:invCounts(root),fishCaught:parseFishCaught(root),requests:parseRequests(root,invCounts(root)),ponds:parsePonds(root),achievements:achIds,achVerified:achV.verified,achStats:achV.stats,sources:{season:season.source,year:year.source,day:day.source}};window.lastData=data;return data}
 $('fileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const data=parseSave(await f.text(),f.name);localStorage.setItem('lastImportName',f.name);render(data)}catch(err){console.warn('Save import warning:',err)}});
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));t.classList.add('active');$(t.dataset.tab).classList.add('active')});
-render({fileName:'none',playerName:'No save imported',farmName:'Import save',year:'?',season:'?',day:'?',money:0,crafting:{},cookingLearned:{},cooked:{},statsMap:{},booksRead:{},mail:[],requests:[],ponds:[],achievements:[],achVerified:{},achStats:{},sources:{season:'not loaded',year:'not loaded',day:'not loaded'}});
+render({fileName:'none',playerName:'No save imported',farmName:'Import save',year:'?',season:'?',day:'?',money:0,crafting:{},cookingLearned:{},cooked:{},statsMap:{},booksRead:{},mail:[],inventory:{},fishCaught:{},requests:[],ponds:[],achievements:[],achVerified:{},achStats:{},sources:{season:'not loaded',year:'not loaded',day:'not loaded'}});
 </script>
 </body>
 </html>
