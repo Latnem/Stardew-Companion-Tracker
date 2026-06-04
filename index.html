@@ -410,8 +410,11 @@ function parseFishCaught(root){
  root.querySelectorAll('fishCaught > item').forEach(it=>{
    const id=txt(it,'key > int')||txt(it,'key > string');
    const nums=[...it.querySelectorAll('value int')].map(x=>parseInt(x.textContent)).filter(n=>!isNaN(n));
-   const count=nums.reduce((a,b)=>a+b,0);
-   if(id && count>0) out[normId(id)]=count;
+   // Stardew stores fishCaught as [numberCaught, largestSize].
+   // Do NOT add the second number; it is size/record, not count.
+   const count=nums.length ? nums[0] : 0;
+   const bestSize=nums.length>1 ? nums[1] : null;
+   if(id && count>0) out[normId(id)]={count,bestSize};
  });
  return out;
 }
@@ -425,9 +428,9 @@ function renderReady(data){
 }
 function renderFish(data){
  const caught=data.fishCaught||{};
- const done=FISH_LIST.filter(f=>caught[f.id]);
- const missing=FISH_LIST.filter(f=>!caught[f.id]);
- const card=(f,ok)=>`<div class="item ${ok?'done':'missing'}" data-name="${f.name.toLowerCase()}"><div class="itemPic">${img(f.name,'🎣')}</div><div><div class="itemTitle">${f.name}</div><div class="itemSub">${ok?'Caught '+caught[f.id]+' time(s)':'Not caught yet'}</div><div class="help"><b>Where:</b> ${f.where}<br><b>When:</b> ${f.when}</div></div></div>`;
+ const done=FISH_LIST.filter(f=>caught[f.id]&&caught[f.id].count>0);
+ const missing=FISH_LIST.filter(f=>!(caught[f.id]&&caught[f.id].count>0));
+ const card=(f,ok)=>`<div class="item ${ok?'done':'missing'}" data-name="${f.name.toLowerCase()}"><div class="itemPic">${img(f.name,'🎣')}</div><div><div class="itemTitle">${f.name}</div><div class="itemSub">${ok?'Caught '+caught[f.id].count+' time(s)'+(caught[f.id].bestSize!=null?' • Best size '+caught[f.id].bestSize:''):'Not caught yet'}</div><div class="help"><b>Where:</b> ${f.where}<br><b>When:</b> ${f.when}</div></div></div>`;
  $('fish').innerHTML=`<div class="card span12"><h2 class="visualTitle"><span class="emoji">🎣</span><span>Fish Collection</span></h2><p class="mini">Shows fish caught from the save file and fish still missing, with where/when hints.</p><div class="countGrid"><div class="countBox"><b>${done.length}</b>Caught</div><div class="countBox"><b>${missing.length}</b>Missing</div><div class="countBox"><b>${FISH_LIST.length}</b>Tracked Fish</div></div><input class="search" placeholder="Search fish..." oninput="filterCards(this,'fishList')"><br><br><div class="items" id="fishList">${done.map(f=>card(f,true)).join('')}${missing.map(f=>card(f,false)).join('')}</div></div>`;
 }
 
